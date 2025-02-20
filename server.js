@@ -9,7 +9,7 @@ const {open} = require('sqlite')
 
 const fs = require("fs");
 const path = require("path");
-const _ = require("lodash");
+// const _ = require("lodash");
 
 const app = express(); 
 const port = process.env.PORT || 5000;
@@ -360,63 +360,63 @@ app.get("/api/recommendations", async (req, res) => {
 // const oneHotEncodeCategory = (category) => categories.map((cat) => (cat === category ? 1 : 0));
 
 // Helper function to calculate cosine similarity
-function cosineSimilarity(vecA, vecB) {
-  if (!vecA || !vecB || vecA.length === 0 || vecB.length === 0) {
-    return 0;
-  }
+// function cosineSimilarity(vecA, vecB) {
+//   if (!vecA || !vecB || vecA.length === 0 || vecB.length === 0) {
+//     return 0;
+//   }
 
-  const dotProduct = _.sum(vecA.map((x, i) => x * (vecB[i] || 0)));
-  const magnitudeA = Math.sqrt(_.sum(vecA.map((x) => x * x)));
-  const magnitudeB = Math.sqrt(_.sum(vecB.map((x) => x * x)));
+//   const dotProduct = _.sum(vecA.map((x, i) => x * (vecB[i] || 0)));
+//   const magnitudeA = Math.sqrt(_.sum(vecA.map((x) => x * x)));
+//   const magnitudeB = Math.sqrt(_.sum(vecB.map((x) => x * x)));
 
-  return magnitudeA && magnitudeB ? dotProduct / (magnitudeA * magnitudeB) : 0;
-}
+//   return magnitudeA && magnitudeB ? dotProduct / (magnitudeA * magnitudeB) : 0;
+// }
 
-// API to get ML-based recommendations
-app.get("/api/ml/recommendations/:userId", async (req, res) => {
-  const userId = req.params.userId;
+// // API to get ML-based recommendations
+// app.get("/api/ml/recommendations/:userId", async (req, res) => {
+//   const userId = req.params.userId;
 
-  // Fetch user event registrations from the database
-  const [registrations] = await db.all(
-    "SELECT event_id FROM event_registrations WHERE user_id = ?",
-    [userId]
-  );
+//   // Fetch user event registrations from the database
+//   const [registrations] = await db.all(
+//     "SELECT event_id FROM event_registrations WHERE user_id = ?",
+//     [userId]
+//   );
 
-  // Get event details based on registrations
-  const userEvents = registrations
-    .map((registration) => events.find((event) => event.id === registration.event_id))
-    .filter((event) => event !== undefined);
+//   // Get event details based on registrations
+//   const userEvents = registrations
+//     .map((registration) => events.find((event) => event.id === registration.event_id))
+//     .filter((event) => event !== undefined);
 
-  // Create a vector for user preferences based on the registered events
-  const userPreferences = userEvents.map((event) => [
-    event.entry_price === 0 ? 1 : 0, // Free event = 1, else 0
-    event.category, // One-hot encoding or numeric encoding of category
-  ]);
+//   // Create a vector for user preferences based on the registered events
+//   const userPreferences = userEvents.map((event) => [
+//     event.entry_price === 0 ? 1 : 0, // Free event = 1, else 0
+//     event.category, // One-hot encoding or numeric encoding of category
+//   ]);
 
-  // Convert event data into vectors, ensuring only defined events are used
-  const eventVectors = events
-    .filter((event) => event !== undefined)
-    .map((event) => [
-      event.entry_price === 0 ? 1 : 0,
-      event.category, // One-hot or numeric encoding for category
-    ]);
+//   // Convert event data into vectors, ensuring only defined events are used
+//   const eventVectors = events
+//     .filter((event) => event !== undefined)
+//     .map((event) => [
+//       event.entry_price === 0 ? 1 : 0,
+//       event.category, // One-hot or numeric encoding for category
+//     ]);
 
-  // Calculate similarity between user's preferences and each event
-  const recommendations = eventVectors
-    .map((vector, index) => {
-      // Get cosine similarity between the first registered event and the current event
-      const similarity = cosineSimilarity(userPreferences[0], vector); 
-      return { event: events[index], similarity };
-    })
-    .sort((a, b) => b.similarity - a.similarity); // Sort by similarity
+//   // Calculate similarity between user's preferences and each event
+//   const recommendations = eventVectors
+//     .map((vector, index) => {
+//       // Get cosine similarity between the first registered event and the current event
+//       const similarity = cosineSimilarity(userPreferences[0], vector); 
+//       return { event: events[index], similarity };
+//     })
+//     .sort((a, b) => b.similarity - a.similarity); // Sort by similarity
 
-  // Filter out events that the user is already registered for
-  const filteredRecommendations = recommendations
-    .filter((rec) => !userEvents.some((userEvent) => userEvent.id === rec.event.id)) // Exclude already registered events
-    .slice(0, 5) // Get last 5 events
-    .reverse(); // Reverse the order to get the most relevant ones last
+//   // Filter out events that the user is already registered for
+//   const filteredRecommendations = recommendations
+//     .filter((rec) => !userEvents.some((userEvent) => userEvent.id === rec.event.id)) // Exclude already registered events
+//     .slice(0, 5) // Get last 5 events
+//     .reverse(); // Reverse the order to get the most relevant ones last
 
-  // Return the recommended events
-  res.json(filteredRecommendations.map((rec) => rec.event));
-});
+//   // Return the recommended events
+//   res.json(filteredRecommendations.map((rec) => rec.event));
+// });
 
