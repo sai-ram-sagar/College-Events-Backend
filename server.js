@@ -97,7 +97,7 @@ app.post("/signup", async (req, res) => {
         const { username, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const query = `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`;
-        const result = await db.get(query, [username, email, hashedPassword]);
+        const result = await db.run(query, [username, email, hashedPassword]);
         const userId = result.insertId;
         const token = jwt.sign({ userId }, "your_secret_key", { expiresIn: "1h" });
 
@@ -122,11 +122,12 @@ app.post("/login", async(req, res) => {
         if (results !==undefined) {
             const userId = results.id;
             const hashedPassword = results.password;
-            console.log(userId)
-            // const isMatch = await bcrypt.compare(password, hashedPassword);
-            // if (!isMatch) {
-            //     return res.status(401).json({ error: "Invalid credentials", });
-            // }
+            console.log(userId, hashedPassword)
+            const isMatch = await bcrypt.compare(password, hashedPassword);
+            console.log(isMatch)
+            if (!isMatch) {
+                return res.status(401).json({ error: "Invalid credentials", });
+            }
 
             // Generate JWT token
             const token = jwt.sign({ userId }, "your_secret_key", { expiresIn: "1h" });
