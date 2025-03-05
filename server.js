@@ -122,7 +122,7 @@ app.post("/login", async(req, res) => {
         if (results !==undefined) {
             const userId = results.id;
             const hashedPassword = results.password;
-            console.log(userId, hashedPassword)
+            // console.log(userId, hashedPassword)
             const isMatch = await bcrypt.compare(password, hashedPassword);
             console.log(isMatch)
             if (!isMatch) {
