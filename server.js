@@ -26,7 +26,7 @@ const initializeDBandServer = async() => {
       filename: path.join(__dirname, "events.db"),
       driver: sqlite3.Database,
     });
-    app.listen(port, () => {
+    app.listen(port, "0.0.0.0", () => {
       console.log(`Server is running on http://localhost:${port}`);
     });
     
@@ -262,7 +262,7 @@ app.get("/api/register-event", async (req, res) => {
       [userId]
     );
 
-    // console.log("Returning favorites:", rows); // Debugging
+    // console.log("Returning favorites:", rows); // Debugging 
     res.json(rows);
   } catch (err) {
     console.error("Database error:", err);
