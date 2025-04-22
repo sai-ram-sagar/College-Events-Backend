@@ -1,6 +1,6 @@
 # 🎓 College Events - Backend
 
-Backend for the **College Events Recommendation App** — a full-stack platform that allows students to explore, register, and favorite college events. Built with Node.js, Express, and SQLite, featuring JWT-based authentication and a REST API.
+Backend for the **College Events Recommendation WebApp** — a full-stack platform that allows students to explore, register, and favorite college events. Built with Node.js, Express, and SQLite, featuring JWT-based authentication and a REST API.
 
 🖥️ **Frontend Repo**: [https://github.com/sai-ram-sagar/College-Events-Frontend.git](https://github.com/sai-ram-sagar/College-Events-Frontend.git)  
 🌐 **Live App**: [https://college-events-recommendations.onrender.com](https://college-events-recommendations.onrender.com)
@@ -25,9 +25,6 @@ Backend for the **College Events Recommendation App** — a full-stack platform 
 - JWT for authentication  
 - CORS, dotenv, body-parser  
 - REST API
-
----
-
 
 ---
 
